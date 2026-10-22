@@ -1,0 +1,33 @@
+# Standard infra CI — identical across every iac-aws-* repo.
+pipeline:
+  stages:
+    - stage:
+        identifier: terraform_checks
+        type: CI
+        spec:
+          steps:
+            - step:
+                identifier: fmt
+                name: terraform fmt -check
+                type: Run
+                spec:
+                  command: terraform fmt -check -recursive
+            - step:
+                identifier: validate
+                name: terraform validate
+                type: Run
+                spec:
+                  command: |-
+                    for env in environments/*/; do
+                      terraform -chdir="$env" init -backend=false
+                      terraform -chdir="$env" validate
+                    done
+            - step:
+                identifier: plan
+                name: terraform plan
+                type: Run
+                spec:
+                  command: |-
+                    for env in environments/*/; do
+                      terraform -chdir="$env" plan -input=false
+                    done
