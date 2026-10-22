@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: iac-aws-wallet
+  description: Infrastructure repository for the wallet system
+  annotations:
+    harness.io/pipelines: default
+spec:
+  type: infrastructure
+  lifecycle: production
+  owner: team-commerce
